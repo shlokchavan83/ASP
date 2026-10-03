@@ -1,0 +1,2371 @@
+Practical 1 - Creating simple applications and testing applications.
+HomeController.cs
+
+using System.Web.Mvc;
+
+namespace WebApplication3.Controllers
+{
+    public class HomeController : Controller
+    {
+        // Home Page
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        // About Page
+        public ActionResult About()
+        {
+            ViewBag.Message = "Your application description page.";
+            return View();
+        }
+
+        // Contact Page
+        public ActionResult Contact()
+        {
+            ViewBag.Message = "Your contact page.";
+            return View();
+        }
+
+        // Security Page
+        public ActionResult Security()
+        {
+            ViewBag.Message = "Your security page.";
+            return View();
+        }
+    }
+}
+
+About.cshtml
+cshtml
+@{
+    ViewBag.Title = "About";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>@ViewBag.Message</h3>
+
+<p>Use this area to provide additional information.</p>
+
+_Layout.cshtml
+
+cshtml
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+
+            <div class="navbar-header">
+                <button type="button"
+                        class="navbar-toggle"
+                        data-toggle="collapse"
+                        data-target=".navbar-collapse"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                @Html.ActionLink(
+                    "Application name",
+                    "Index",
+                    "Home",
+                    new { area = "" },
+                    new { @class = "navbar-brand" }
+                )
+            </div>
+
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        @Html.ActionLink("Home", "Index", "Home")
+                    </li>
+                    <li>
+                        @Html.ActionLink("About", "About", "Home")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Contact", "Contact", "Home")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Security", "Security", "Home")
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+
+        <hr />
+
+        <footer>
+            <p>
+                &copy; @DateTime.Now.Year - My ASP.NET Application
+            </p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+
+Practical 2 - Creating Testing Projects in ASP.NET Core
+Step 1: Create an ASP.NET Core Project
+Open Visual Studio 2019
+1. Click Create a new project.
+2. Select ASP.NET Core Web Application.
+3. Click Next.
+Configure Project
+ Project Name: StudentManagement
+ Location: Choose desired folder.
+ Click Create.
+
+Select Template
+Choose:
+ASP.NET Core Web Application (Model-View-Controller)
+Click Create.
+The ASP.NET Core project is now ready.
+Step 2: Add a Test Project
+In Solution Explorer
+Right-click on the solution.
+Select:
+Add → New Project
+Search for Test Project
+In the search box type:
+xUnit Test Project (.NET Core)
+Select it and click Next.
+Configure Test Project
+Project Name:
+StudentManagement.Tests
+Click Create.
+The solution will now contain:
+StudentManagement
+StudentManagement.Tests
+Step 3: Add Reference to Main Project
+The test project must access classes from the main project.
+Steps
+Right-click:
+StudentManagement.Tests
+Select:
+Add → Project Reference
+Check:
+StudentManagement
+Click OK.
+Solution Structure
+Solution
+│
+├── StudentManagement
+│
+└── StudentManagement.Tests
+Step 4: Install Required NuGet Packages
+Right-click:
+StudentManagement.Tests
+Select:
+Manage NuGet Packages
+
+Install:
+xUnit
+xunit
+xUnit Runner
+xunit.runner.visualstudio
+Microsoft Test SDK
+Microsoft.NET.Test.Sdk
+Step 5: Create a Class to Test
+Create a class in the main project.
+Calculator.cs
+using System;
+namespace StudentManagement
+{
+    public class Calculator
+    {
+        // Method to add two numbers
+        public int Add(int a, int b)
+        {
+            return a + b;
+        }
+
+        // Method to multiply two numbers
+        public int Multiply(int a, int b)
+        {
+            return a * b;
+        }
+    }
+}
+Step 6: Create Unit Test Class
+Inside:
+StudentManagement.Tests
+Create:
+CalculatorTests.cs
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Xunit;
+using StudentManagement;
+using StudentManagement.Models;
+
+namespace StudentManagementTests
+{
+    public class CalculatorTests
+    {
+        [Fact]
+        public void Add_TwoNumbers_ReturnsSum()
+        {
+            // Arrange
+            Calculator c = new StudentManagement.Calculator();
+
+            // Act
+            int result = c.Add(10, 20);
+
+            // Assert
+            Assert.Equal(30, result);
+        }
+    }
+}
+
+Understanding the Test Method
+Arrange
+Create objects and prepare data.
+Calculator c = new Calculator();
+Act
+Call the method being tested.
+int result = c.Add(10,20);
+Assert
+Verify the result.
+Assert.Equal(30, result);
+Step 7: Run the Tests
+Open:
+Test → Test Explorer
+The Test Explorer window appears.
+Click:
+Run All
+Output:
+Passed: 1
+Failed: 0
+Skipped: 0
+Green check marks indicate successful tests.
+Example: Testing Multiply Method
+[Fact]
+public void Multiply_TwoNumbers_ReturnsProduct()
+{
+ Calculator c = new Calculator();
+ int result = c.Multiply(5, 4);
+ Assert.Equal(20, result);
+}
+Running Individual Tests
+In Test Explorer:
+1. Right-click the test.
+2. Select:
+Run
+or
+Debug
+Example of Failed Test
+[Fact]
+public void Add_Test()
+
+{
+ Calculator c = new Calculator();
+ int result = c.Add(10, 20);
+ Assert.Equal(50, result);
+}
+Result:
+Failed
+Expected: 50
+Actual: 30
+This helps identify errors quickly.
+Using Multiple Test Cases
+[Theory]
+[InlineData(10,20,30)]
+[InlineData(5,5,10)]
+[InlineData(100,50,150)]
+public void Add_TestCases(int a,
+int b,
+int expected)
+{
+ Calculator c = new Calculator();
+ int result = c.Add(a, b);
+ Assert.Equal(expected, result);
+}
+Testing String Methods Example
+Main Project
+public class Student
+{
+ public string GetName()
+ {
+  return "Rahul";
+ }
+}
+Test Project
+[Fact]
+public void GetName_ReturnsStudentName()
+{
+ Student s = new Student();
+ string result = s.GetName();
+ Assert.Equal("Rahul", result);
+}
+
+
+Practical 3 - Creating Applications with Data (CRUD)
+Step 1: Create a New Project
+1. Open Visual Studio 2019.
+2. Click Create a new project.
+
+ASP.NET Web Application (.NET Framework)
+4. Click Next.
+
+Step 2: Configure Project
+Enter:
+Field Value
+Project Name StudentCRUD
+Location Choose Folder
+Framework .NET Framework 4.7.2
+Click Create.
+
+Step 3: Select Template
+Choose:
+MVC
+Authentication:
+No Authentication
+Click Create.
+
+Step 4: Run the Application
+Press:
+Ctrl + F5
+The default MVC application should open.
+Step 5: Install Entity Framework 6
+Open:
+Tools → NuGet Package Manager →
+Package Manager Console
+Execute:
+Install-Package EntityFramework
+After installation, the project will have Entity Framework 6.
+Step 6: Create Model Class
+Right-click Models folder.
+Select:
+Add → Class
+Name:
+Student.cs
+Write the following code:
+using System.ComponentModel.DataAnnotations;
+namespace StudentCRUD.Models
+{
+    public class Student
+    {
+        [Key]
+        public int StudentId { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string Name { get; set; }
+
+        [Range(18, 60)]
+        public int Age { get; set; }
+
+        [StringLength(50)]
+        public string Course { get; set; }
+    }
+}
+Step 7: Create Database Context Class
+Right-click Models folder.
+
+Select:
+Add → Class
+Name:
+StudentContext.cs
+Write:
+using System.Data.Entity;
+namespace StudentCRUD.Models
+{
+ public class StudentContext : DbContext
+ {
+  public StudentContext()
+   : base("StudentConnection")
+   {
+   }
+   public DbSet<Student> Students
+   {
+   get;
+   set;
+   }
+ }
+}
+Step 8: Configure Connection String
+Open:
+Web.config
+Inside <configuration> add:
+<connectionStrings>
+ <add name="StudentConnection"
+  connectionString="Data Source=(LocalDB)\MSSQLLocalDB;
+  Initial Catalog=StudentDB;
+  Integrated Security=True"
+  providerName="System.Data.SqlClient"/>
+</connectionStrings>
+
+Step 9: Enable Migrations
+Open Package Manager Console.
+Execute:
+Enable-Migrations
+You will see:
+Migrations folder created.
+
+Step 10: Create Migration
+Execute:
+Add-Migration InitialCreate
+
+Step 11: Create Database
+Execute:
+Update-Database
+The database StudentDB and Students table will be created
+automatically.
+
+Step 12: Verify Database
+Open:
+View →
+SQL Server Object Explorer
+Expand:
+(localdb)\MSSQLLocalDB
+↓
+StudentDB
+↓
+Tables
+↓
+dbo.Students
+
+Step 13: Create Controller using Scaffolding
+Right-click Controllers.
+Select:
+Add →
+Controller
+Choose:
+MVC 5 Controller with views,
+using Entity Framework
+Click Add.
+
+Step 14: Configure Scaffold
+Fill:
+Option Value
+Model Class Student
+Data Context Class StudentContext
+
+Option Value
+Controller Name StudentsController
+Click Add.
+Visual Studio automatically creates:
+Controllers
+StudentsController.cs
+Views
+Students
+Create.cshtml
+Edit.cshtml
+Delete.cshtml
+Details.cshtml
+Index.cshtml
+
+Step 15: Run Application
+Press:
+Ctrl + F5
+In browser:
+https://localhost:44300/Students
+
+CRUD Operation 1: Create
+Click:
+Create New
+Enter:
+Name Age Course
+Amit 20 BSc IT
+Click:
+Create
+The record is inserted into the database.
+
+CRUD Operation 2: Read
+The student list is displayed.
+ID Name Age Course
+1 Amit 20 BSc IT
+CRUD Operation 3: Update
+Click:
+Edit
+Change:
+
+Age = 21
+Click:
+Save
+The record is updated.
+CRUD Operation 4: Delete
+Click:
+Delete
+Then click:
+Delete
+The student record is removed.
+
+Understanding Generated Controller Code
+Display Records
+public ActionResult Index()
+ {
+ return View(db.Students.ToList());
+ }
+Create Record
+[HttpPost]
+[ValidateAntiForgeryToken]
+public ActionResult Create(Student student)
+ {
+  if (ModelState.IsValid)
+  {
+    db.Students.Add(student);
+    db.SaveChanges();
+    return RedirectToAction("Index");
+  }
+  return View(student);
+}
+Edit Record
+db.Entry(student).State =
+ EntityState.Modified;
+db.SaveChanges();
+Delete Record
+Student student =
+ db.Students.Find(id);
+db.Students.Remove(student);
+db.SaveChanges();
+
+Project Structure
+StudentCRUD
+│
+├── Controllers
+│ StudentsController.cs
+│
+├── Models
+│ Student.cs
+│ StudentContext.cs
+│
+├── Views
+│ └── Students
+│ Create.cshtml
+│ Edit.cshtml
+│ Delete.cshtml
+│ Details.cshtml
+│ Index.cshtml
+│
+├── Migrations
+│
+├── Web.config
+└── Global.asax
+
+
+Practical 4 - Creating a Shopping Cart Application
+Step 1: Open Visual Studio 2019
+1. Open Visual Studio 2019
+2. Click
+Create a new project
+Step 2: Select Project Template
+Choose
+ASP.NET Web Application (.NET Framework)
+Click Next
+Step 3: Configure Project
+Project Name
+ShoppingCartApp
+Location
+Choose your folder.
+Framework
+.NET Framework 4.7.2
+Click
+Create
+Step 4: Select MVC Template
+Choose
+
+MVC
+Authentication
+No Authentication
+Click
+Create
+Visual Studio creates the project.
+Project Structure
+ShoppingCartApp
+Controllers
+Models
+Views
+Content
+Scripts
+App_Start
+Web.config
+Step 5: Create Product Model
+Right-click
+Models
+Add
+Class
+Name
+Product.cs
+Replace code with
+namespace ShoppingCartApp.Models
+{
+  public class Product
+  {
+    public int ProductID { get; set; }
+    public string ProductName { get; set; }
+    public decimal Price { get; set; }
+  }
+}
+Save.
+Step 6: Create Cart Model
+
+Again
+Right-click
+Models
+Add
+Class
+Name
+CartItem.cs
+Code
+namespace ShoppingCartApp.Models
+{
+  public class CartItem
+  {
+    public Product Product { get; set; }
+    public int Quantity { get; set; }
+  }
+}
+Save.
+Step 7: Create Home Controller
+Right-click
+Controllers
+Add
+Controller
+Choose
+MVC 5 Controller - Empty
+Name
+HomeController
+Click Add.
+Step 8: Add Product List
+Replace controller code with
+using System.Collections.Generic;
+using System.Web.Mvc;
+
+using ShoppingCartApp.Models;
+namespace ShoppingCartApp.Controllers
+{
+  public class HomeController : Controller
+  {
+    public ActionResult Index()
+    {
+      List<Product> products = new List<Product>()
+      {
+        new Product{ ProductID=1, ProductName="Laptop", Price=55000 },
+        new Product{ ProductID=2, ProductName="Mouse", Price=600 },
+        new Product{ ProductID=3, ProductName="Keyboard", Price=1500 },
+        new Product{ ProductID=4, ProductName="Monitor", Price=12000 }
+      };
+      return View(products);
+    }
+  }
+}
+Build the project.
+Ctrl + Shift + B
+No errors should appear.
+Step 9: Create Index View
+Right-click
+return View(products);
+Select
+Add View
+View Name
+Index
+Template
+Empty
+Click Add.
+Step 10: Display Products
+Replace code inside Index.cshtml
+@model IEnumerable<ShoppingCartApp.Models.Product>
+<h2>Products</h2>
+<table class="table table-bordered">
+
+ <tr>
+ <th>ID</th>
+ <th>Name</th>
+ <th>Price</th>
+ <th></th>
+ </tr>
+@foreach(var item in Model)
+{
+ <tr>
+  <td>@item.ProductID</td>
+  <td>@item.ProductName</td>
+  <td>@item.Price</td>
+  <td>
+    @Html.ActionLink("Add To Cart","AddToCart",
+   new{id=item.ProductID})
+  </td>
+</tr>
+}
+</table>
+Step 11: Create Cart Controller
+Right-click
+Controllers
+Add
+MVC 5 Controller - Empty
+Name
+CartController
+Step 12: Add Required Namespaces
+using ShoppingCartApp.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+Step 13: Create AddToCart Method
+Inside CartController
+public ActionResult AddToCart(int id)
+{
+  List<Product> products = new List<Product>()
+  {
+    new Product{ ProductID=1, ProductName="Laptop", Price=55000 },
+    new Product{ ProductID=2, ProductName="Mouse", Price=600 },
+    new Product{ ProductID=3, ProductName="Keyboard", Price=1500 },
+    new Product{ ProductID=4, ProductName="Monitor", Price=12000 }
+  };
+
+  Product product = products.FirstOrDefault(x => x.ProductID == id);
+  List<CartItem> cart;
+  if (Session["Cart"] == null)
+  {
+    cart = new List<CartItem>();
+  }
+  else
+  {
+    cart = (List<CartItem>)Session["Cart"];
+  }
+  CartItem item = cart.FirstOrDefault(x => x.Product.ProductID == id);
+  if (item == null)
+  {
+    cart.Add(new CartItem()
+    {
+      Product = product,
+      Quantity = 1
+    });
+  }
+  else
+  {
+    item.Quantity++;
+  }
+  Session["Cart"] = cart;
+  return RedirectToAction("Index", "Home");
+}
+Step 14: Create Cart Action
+Below AddToCart
+public ActionResult Index()
+{
+  List<CartItem> cart;
+  if (Session["Cart"] == null)
+  {
+    cart = new List<CartItem>();
+  }
+  else
+  {
+  cart = (List<CartItem>)Session["Cart"];
+  }
+  return View(cart);
+}
+Step 15: Create Cart View
+Right-click
+Index()
+
+Add View
+Name
+Index
+Template
+Empty
+Step 16: Display Cart
+Replace code
+model IEnumerable<ShoppingCartApp.Models.Product>
+<h2>Products</h2>
+<table class="table table-bordered">
+  <tr> <th>ID</th> <th>Name</th> <th>Price</th> <th></th> </tr>
+  @foreach (var item in Model)
+  {
+    <tr>
+      <td>@item.ProductID</td>
+      <td>@item.ProductName</td>
+      <td>@item.Price</td>
+      <td>@Html.ActionLink("Add To Cart", "AddToCart", "Cart", new { id = item.ProductID }, null) </td>
+      <td>@Html.ActionLink("Remove", "Remove", "Cart", new { id = item.ProductID}, null) </td>
+    </tr>
+  }
+</table>
+Step 17: Add View Cart Link
+Open
+Views
+→ Shared
+→ _Layout.cshtml
+Find Navbar
+Add
+<li>@Html.ActionLink("Cart","Index","Cart")</li>
+inside the menu.
+Step 18: Run Application
+Press
+F5
+
+Home page appears.
+Step 19: Test the Application
+Click
+Add To Cart
+for any product.
+Click
+Cart
+The selected products appear.
+Step 20: Add Remove Button (Optional)
+Modify the cart table by adding another column:
+<th>Action</th>
+Inside the foreach loop:
+<td>
+  @Html.ActionLink("Remove", "Remove", new { id = item.Product.ProductID })
+</td>
+Add the following action to CartController:
+public ActionResult Remove(int id)
+{
+  List<CartItem> cart = Session["Cart"] as List<CartItem>;
+  if (cart != null)
+  {
+    CartItem item = cart.FirstOrDefault(x => x.Product.ProductID == id);
+    if (item != null)
+    {
+      cart.Remove(item);
+    }
+    Session["Cart"] = cart;
+  }
+  return RedirectToAction("Index");
+}
+Step 21: Build and Run
+1. Press Ctrl + Shift + B to build the project.
+2. Press F5 to run the application.
+3. Test the following:
+Add multiple products to the cart.
+Increase the quantity by adding the same product again.
+View the cart.
+Remove products from the cart.
+Verify that the grand total updates correctly.
+
+
+Practical 5 - Implementing Security to Application
+1: Create a New ASP.NET Core MVC Project
+ Open Visual Studio 2019.
+ Click Create a new project.
+ Select ASP.NET Web Application(.Net Framework).
+ Click Next.
+ Enter
+Project Name: SecureMVCApp
+ Click Create.
+ Choose
+ASP.NET Core Web App (Model-View-Controller)
+ Click Change Authentication.
+Choose
+Individual User Accounts
+ Click OK.
+ Click Create.
+Visual Studio automatically creates:
+ Identity Database
+ Login page
+ Registration page
+ Logout page
+ Identity models
+2: Run the Application
+Press
+Ctrl + F5
+
+The home page opens.
+Top-right corner contains
+Register
+Login
+These are automatically created.
+3: Create the Identity Database
+Open
+View
+→ Server Explorer
+Check
+Data connections\DefaultConnections(DemoSecurity)\Tables
+First register a user, ASP.NET Core automatically creates a database similar to
+SecureMVCAppIdentity
+Contains tables:
+AspNetUsers
+AspNetRoles
+AspNetUserRoles
+AspNetUserClaims
+AspNetUserLogins
+AspNetUserTokens
+4: Register a User
+Click
+Register
+Fill
+Email
+student@gmail.com
+Password
+Student@123
+Confirm Password
+Student@123
+Click
+Register
+The user is saved in
+AspNetUsers
+
+5: Verify the User
+Open
+Server Explorer
+Expand
+Tables
+AspNetUsers
+Right-click
+View Data
+You can see
+Email
+Password Hash
+UserName
+The password is encrypted.
+6: Understand Authentication
+Authentication means
+Who are you?
+Example
+Username:
+student@gmail.com
+Password:
+Student@123
+If correct
+User logs in.
+Otherwise
+Access denied.
+
+7: Create a Secure Controller
+Create
+Controllers
+Right-click
+Add
+Controller
+Create
+StudentController.cs
+namespace SecureMVCApp.Controllers
+{
+  [Authorize]
+  public class StudentController : Controller
+  {
+    public ActionResult Index()
+    {
+      return View();
+    }
+  }
+}
+Notice
+[Authorize]
+This protects the controller.
+8: Create View
+Inside
+Views
+Student
+Create
+Index.cshtml
+<h2>Student Dashboard</h2>
+<h3>Only logged-in users can see this page.</h3>
+9: Test Authorization
+Run
+https://localhost:5001/Student
+Without login
+
+You are redirected automatically to
+Login Page
+After login
+Student Dashboard opens.
+10: Protect Only One Action
+Instead of protecting the whole controller
+public class StudentController : Controller
+{
+    public ActionResult About()
+    {
+      return View();
+    }
+    [Authorize]
+    public ActionResult Result()
+    {
+      return View();
+    }
+}
+Now
+https://localhost:44320/Student/Index
+https://localhost:44320/Student/about
+Everyone can access.
+https://localhost:44320/Student/Result
+Redirect to Login page
+11: Allow Anonymous Users
+Sometimes one page should be public.
+Example
+[Authorize]
+public class StudentController : Controller
+{
+  [AllowAnonymous]
+  public ActionResult About()
+  {
+    return View();
+  }
+  public ActionResult Dashboard()
+  {
+    return View();
+  }
+}
+
+
+Practical 6 - Working with URL routing and dependency injections.
+
+Create the Project
+Open Visual Studio 2019.
+Select:
+Create a new project
+Choose:
+ASP.NET Web Application (.NET Framework)
+Click Next.
+Enter:
+Project Name: URLRoutingDemo
+Select:
+.NET Framework 4.7.2
+Click Create.
+Select:
+MVC
+Select:
+No Authentication
+Click Create.
+5. Create StudentController
+Right-click:
+Controllers
+Select:
+Add → Controller
+Select:
+
+MVC 5 Controller - Empty
+Click Add.
+Enter:
+StudentController
+Click Add.
+Replace the code with:
+using System.Web.Mvc;
+namespace URLRoutingDemo.Controllers
+{
+  public class StudentController : Controller
+  {
+    public ActionResult Index()
+    {
+      return Content("Welcome to Student Page");
+    }
+    public ActionResult Details(int id)
+    {
+      return Content("Student ID is: " + id);
+    }
+  }
+}
+6. Test the First URL
+Run the project using:
+Ctrl + F5
+Suppose Visual Studio starts the project at:
+https://localhost:44300/
+Now enter:
+https://localhost:44300/Student/Index
+You should see:
+Welcome to Student Page
+Why?
+The URL:
+/Student/Index
+is mapped as:
+Controller → Student
+Action → Index
+Therefore MVC executes:
+StudentController
+
+↓
+Index()
+7. Test URL with Parameter
+Now enter:
+https://localhost:44300/Student/Details/101
+You should see:
+Student ID is: 101
+The URL:
+/Student/Details/101
+is mapped as:
+Controller = Student
+Action = Details
+Id = 101
+Therefore MVC executes:
+public ActionResult Details(int id)
+{
+ return Content("Student ID is: " + id);
+}
+Here:
+id = 101
+
+_____________
+
+Dependency Injection Pract:
+Step 1: Create the ASP.NET MVC Project
+Open Visual Studio 2019.
+Select:
+Create a new project
+Select:
+ASP.NET Web Application (.NET Framework)
+Click Next.
+Enter:
+Project Name: DependencyInjectionDemo
+Select:
+
+.NET Framework 4.7.2
+or another .NET Framework version available in your Visual Studio.
+Click Create.
+Select:
+MVC
+Select:
+No Authentication
+Click Create.
+Step 2: Install Ninject
+Go to:
+Tools → NuGet Package Manager → Package Manager Console
+Run:
+Install-Package Ninject.MVC5
+Wait until installation finishes.
+Important
+You may not get:
+NinjectWebCommon.cs
+Then create your own:
+NinjectConfig.cs
+Step 3: Check Ninject References
+In Solution Explorer, expand:
+References
+Look for Ninject-related references.
+You should have packages/references such as:
+Ninject
+Ninject.Web.Common
+Ninject.Web.Mvc
+If necessary, install them from Package Manager Console:
+Install-Package Ninject
+Install-Package Ninject.Web.Common
+Install-Package Ninject.Web.Mvc
+Step 4: Create IStudentService.cs
+In Solution Explorer:
+Right-click Models → Add → Class
+Name:
+IStudentService.cs
+Put this code inside:
+using System.Collections.Generic;
+namespace DependencyInjectionDemo.Models
+{
+  public interface IStudentService
+  {
+    List<string> GetStudents();
+  }
+}
+What is this?
+IStudentService is an interface.
+It tells that any student service must provide:
+GetStudents()
+Step 5: Create StudentService.cs
+Right-click:
+Models → Add → Class
+Name:
+StudentService.cs
+Add:
+using System.Collections.Generic;
+namespace DependencyInjectionDemo.Models
+{
+  public class StudentService : IStudentService
+  {
+    public List<string> GetStudents()
+    {
+      return new List<string>
+      {
+      "Rahul",
+      "Priya",
+      "Amit",
+      "Sneha"
+      };
+    }
+  }
+}
+Here:
+public class StudentService : IStudentService
+means:
+StudentService implements IStudentService.
+Step 6: Create StudentController.cs
+Right-click:
+Controllers → Add → Controller
+Select:
+MVC 5 Controller - Empty
+
+Click Add.
+Enter:
+StudentController
+Click Add.
+Replace the controller code with:
+using System.Web.Mvc;
+using DependencyInjectionDemo.Models;
+namespace DependencyInjectionDemo.Controllers
+{
+  public class StudentController : Controller
+  {
+    private readonly IStudentService studentService;
+    public StudentController(IStudentService studentService)
+    {
+      this.studentService = studentService;
+    }
+    public ActionResult Index()
+    {
+      var students = studentService.GetStudents();
+    return View(students);
+    }
+  }
+}
+Understand the Constructor
+The most important part is:
+public StudentController(IStudentService studentService)
+{
+this.studentService = studentService;
+}
+The controller is saying:
+"I need an object that implements IStudentService."
+We are not writing:
+studentService = new StudentService();
+Ninject will provide the required object.
+This is called:
+Constructor Injection
+Step 7: Create NinjectConfig.cs
+This is the step that replaces NinjectWebCommon.cs.
+
+In Solution Explorer, find:
+App_Start
+Right-click:
+App_Start → Add → Class
+Name it:
+NinjectConfig.cs
+Add this complete code:
+using Ninject;
+using Ninject.Web.Mvc;
+using System.Web.Mvc;
+using DependencyInjectionDemo.Models;
+namespace DependencyInjectionDemo.App_Start
+{
+  public static class NinjectConfig
+  {
+    public static void RegisterDependencies()
+    {
+      IKernel kernel = new StandardKernel();
+      kernel.Bind<IStudentService>()
+        .To<StudentService>();
+      DependencyResolver.SetResolver(
+        new NinjectDependencyResolver(kernel)
+      );
+    }
+  }
+}
+Step 8: Modify Global.asax.cs
+Now we have to tell our MVC application to start Ninject.
+Open:
+Global.asax.cs
+You will see something similar to:
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
+namespace DependencyInjectionDemo
+{
+  public class MvcApplication : System.Web.HttpApplication
+  {
+    protected void Application_Start()
+    {
+      AreaRegistration.RegisterAllAreas();
+      FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+      RouteConfig.RegisterRoutes(RouteTable.Routes);
+      BundleConfig.RegisterBundles(BundleTable.Bundles);
+    }
+  }
+}
+Add:
+using DependencyInjectionDemo.App_Start;
+Then modify Application_Start().
+Your complete code should look like:
+using System;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
+using DependencyInjectionDemo.App_Start;
+namespace DependencyInjectionDemo
+{
+  public class MvcApplication : System.Web.HttpApplication
+  {
+    protected void Application_Start()
+    {
+      AreaRegistration.RegisterAllAreas();
+      FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+      RouteConfig.RegisterRoutes(RouteTable.Routes);
+      BundleConfig.RegisterBundles(BundleTable.Bundles);
+      NinjectConfig.RegisterDependencies();
+    }
+  }
+}
+Important
+NinjectConfig.RegisterDependencies();
+This starts our Ninject configuration when the application starts.
+Step 9: Create the Student View
+Go to:
+Controllers
+↓
+StudentController.cs
+Right-click inside:
+public ActionResult Index()
+{
+  var students = studentService.GetStudents();
+  return View(students);
+}
+Select:
+Add View
+Use:
+View name: Index
+Template: Empty
+Click Add.
+Visual Studio should create:
+Views
+└── Student
+└── Index.cshtml
+Step 10: Add Code to Index.cshtml
+Open:
+Views → Student → Index.cshtml
+Add:
+@model List<string>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student List</title>
+</head>
+<body>
+  <h2>Student List</h2>
+  <ul>
+    @foreach (var student in Model)
+    {
+      <li>@student</li>
+    }
+  </ul>
+</body>
+</html>
+Step 11: Build the Project
+Go to:
+Build → Build Solution
+Step 12: Run the Project
+Press:
+Ctrl + F5
+Suppose Visual Studio opens:
+https://localhost:44300/
+Change the URL to:
+https://localhost:44300/Student/Index
+
+
+Practical 7 - Caching
+
+Open Visual Studio 2019.
+Step 1: Create a new project
+Select:
+File → New → Project
+Select:
+ASP.NET Web Application (.NET Framework)
+Click Next.
+Step 2: Configure the project
+Enter:
+Project Name:
+CachingDemo
+Choose your desired location.
+Click Create.
+3. Select MVC Template
+The following window appears:
+Create a new ASP.NET Web Application
+Select:
+MVC
+Keep the default settings.
+Click:
+Create
+4. Create a Simple Data Model
+Right-click the Models folder.
+Select:
+Add → Class
+Name it:
+Product.cs
+Add:
+namespace CachingDemo.Models
+{
+  public class Product
+  {
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public double Price { get; set; }
+  }
+}
+This class represents a product.
+5. Add Caching to the Controller
+
+Open:
+Controllers → HomeController.cs
+Replace the contents with:
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
+using System.Web.Caching;
+using CachingDemo.Models;
+namespace CachingDemo.Controllers
+{
+  public class HomeController : Controller
+  {
+    public ActionResult Index()
+    {
+      string cacheKey = "ProductList";
+      List<Product> products =
+        HttpContext.Cache[cacheKey] as List<Product>;
+      if (products == null)
+      {
+        // Simulate retrieving data from database
+        System.Threading.Thread.Sleep(3000);
+        products = new List<Product>
+        {
+          new Product { Id = 1, Name = "Laptop", Price = 55000 },
+          new Product { Id = 2, Name = "Mobile", Price = 25000 },
+          new Product { Id = 3, Name = "Tablet", Price = 30000 }
+        };
+        HttpContext.Cache.Insert(
+          cacheKey,
+          products,
+          null,
+          DateTime.Now.AddMinutes(5),
+          Cache.NoSlidingExpiration
+        );
+        ViewBag.Message = "Data loaded from database and stored in cache.";
+      }
+      else
+      {
+        ViewBag.Message = "Data loaded from cache.";
+      }
+      return View(products);
+    }
+  }
+}
+6. Create the View
+
+Open:
+Views → Home → Index.cshtml
+Replace its contents with:
+@model IEnumerable<CachingDemo.Models.Product>
+@{
+  ViewBag.Title = "Caching Demo";
+}
+<h2>Caching Demo</h2>
+<p>
+  <strong>@ViewBag.Message</strong>
+</p>
+<table border="1" cellpadding="10">
+  <tr>
+    <th>ID</th>
+    <th>Product Name</th>
+    <th>Price</th>
+  </tr>
+  @foreach (var product in Model)
+  {
+    <tr>
+    <td>@product.Id</td>
+    <td>@product.Name</td>
+    <td>₹@product.Price</td>
+  </tr>
+  }
+</table>
+7. Run the Application
+Press:
+Ctrl + F5
+The browser opens.
+You should see:
+
+8. Test the Cache
+This is the important part of the practical.
+First request
+When you open:
+/Home/Index
+you should see:
+Data loaded from database and stored in cache.
+There will be approximately a 3-second delay.
+The data is now stored in the cache.
+9. Second request
+Refresh the page:
+F5
+You should see:
+
+
+Practical 8 - RESTful Service
+1. Create a New Project
+Open Visual Studio 2019.
+Select:
+File → New → Project
+Search for:
+ASP.NET Web Application (.NET Framework)
+Select it and click Next.
+Enter:
+ Project Name: StudentRESTService
+ Location: Choose your preferred folder
+ Framework: .NET Framework 4.7.2 or .NET Framework 4.8
+Click Create.
+
+2. Select Web API
+In the next window, select:
+Web API
+
+and click Create.
+Visual Studio creates the basic RESTful Web API project.
+The important folders will look approximately like:
+StudentRESTService
+│
+├── App_Start
+│ └── WebApiConfig.cs
+│
+├── Controllers
+│ └── ValuesController.cs
+│
+├── Models
+├── Global.asax
+├── Web.config
+└── packages.config
+3. Understand REST
+REST stands for Representational State Transfer.
+A RESTful service allows a client such as a browser, mobile application, or another
+application to communicate with a server using HTTP.
+The commonly used HTTP methods are:
+HTTP Method Purpose Example
+GET Retrieve data Get all students
+POST Add data Add a student
+PUT Update data Update student
+DELETE Delete data Delete student
+For example:
+GET /api/students
+POST /api/students
+PUT /api/students/1
+DELETE /api/students/1
+4. Create a Student Model
+Right-click the Models folder.
+Select:
+Add → Class
+
+Name the class:
+Student.cs
+Add:
+namespace StudentRESTService.Models
+{
+  public class Student
+  {
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Course { get; set; }
+    public int Age { get; set; }
+  }
+}
+This class represents a student.
+5. Create the REST Controller
+Right-click the Controllers folder.
+Select:
+Add → Controller
+Choose:
+Web API 2 Controller - Empty
+Click Add.
+Enter:
+StudentsController
+The controller should inherit from:
+ApiController
+Add the following code:
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
+using StudentRESTService.Models;
+namespace StudentRESTService.Controllers
+{
+  public class StudentsController : ApiController
+  {
+    static List<Student> students = new List<Student>
+    {
+      new Student
+      {
+        Id = 1,
+        Name = "Rahul",
+        Course = "BSc IT",
+        Age = 20
+      },
+      new Student
+      {
+        Id = 2,
+        Name = "Priya",
+        Course = "BSc IT",
+        Age = 21
+      }
+    };
+    // GET: api/students
+    public IEnumerable<Student> GetStudents()
+    {
+      return students;
+    }
+    // GET: api/students/1
+    public IHttpActionResult GetStudent(int id)
+    {
+      var student = students.FirstOrDefault(s => s.Id == id);
+      if (student == null)
+        return NotFound();
+      return Ok(student);
+    }
+    // POST: api/students
+    public IHttpActionResult PostStudent(Student student)
+    {
+      student.Id = students.Count + 1;
+      students.Add(student);
+      return Ok(student);
+    }
+
+    // PUT: api/students/1
+    public IHttpActionResult PutStudent(int id, Student student)
+    {
+      var existingStudent =
+      students.FirstOrDefault(s => s.Id == id);
+      if (existingStudent == null)
+        return NotFound();
+      existingStudent.Name = student.Name;
+      existingStudent.Course = student.Course;
+      existingStudent.Age = student.Age;
+      return Ok(existingStudent);
+    }
+    // DELETE: api/students/1
+    public IHttpActionResult DeleteStudent(int id)
+    {
+      var student = students.FirstOrDefault(s => s.Id == id);
+      if (student == null)
+        return NotFound();
+      students.Remove(student);
+      return Ok(student);
+    }
+  }
+}
+6. Configure Web API Routing
+Open:
+App_Start
+→ WebApiConfig.cs
+You should see routing similar to:
+using System.Web.Http;
+namespace StudentRESTService
+{
+  public static class WebApiConfig
+  {
+    public static void Register(HttpConfiguration config)
+    {
+      config.MapHttpAttributeRoutes();
+       config.Routes.MapHttpRoute(
+        name: "DefaultApi",
+        routeTemplate: "api/{controller}/{id}",
+        defaults: new
+        {
+          id = RouteParameter.Optional
+        }
+      );
+    }
+  }
+}
+The important part is:
+api/{controller}/{id}
+Therefore:
+StudentsController
+can be accessed using:
+/api/students
+7. Run the RESTful Service
+Press:
+Ctrl + F5
+or click:
+IIS Express
+Visual Studio will open the browser.
+Suppose Visual Studio gives you:
+http://localhost:54321/
+Then the student service URL will be:
+http://localhost:54321/api/students
+8. Test GET
+Open:
+/api/students
+The service should return JSON similar to:
+[
+  {
+    "Id": 1,
+    "Name": "Rahul",
+    "Course": "BSc IT",
+    "Age": 20
+  },
+  {
+    "Id": 2,
+    "Name": "Priya",
+    "Course": "BSc IT",
+    "Age": 21
+  }
+]
+To retrieve a particular student:
+GET /api/students/1
+Response:
+{
+  "Id": 1,
+  "Name": "Rahul",
+  "Course": "BSc IT",
+  "Age": 20
+}
+
+
+Practical 9 - Creating an Application with Controllers and Views
+
+Part A – Create the Project
+Step 1: Open Visual Studio 2019
+Open Visual Studio 2019.
+Select:
+Create a new project
+Step 2: Select ASP.NET MVC Project
+In the search box, type:
+ASP.NET Web Application (.NET Framework)
+Select:
+ASP.NET Web Application (.NET Framework)
+Click Next.
+Step 3: Configure the Project
+Enter:
+Project name:
+StudentMVC
+Select a suitable location.
+Click Create.
+Step 4: Select MVC Template
+You will see:
+Create a new ASP.NET Web Application
+Select:
+MVC
+
+You can leave the other options at their default values.
+Click Create.
+Visual Studio will create the project.
+Part B – Understand the Project Structure
+In Solution Explorer, you will see something similar to:
+StudentMVC
+│
+├── App_Start
+│
+├── Content
+│
+├── Controllers
+│ └── HomeController.cs
+│
+├── Models
+│
+├── Views
+│ ├── Home
+│ │ ├── Index.cshtml
+│ │ ├── About.cshtml
+│ │ └── Contact.cshtml
+│ │
+│ └── Shared
+│
+├── Global.asax
+├── Web.config
+└── ...
+Part C – Understand the Existing Controller
+Open:
+Controllers
+→ HomeController.cs
+You will see code similar to:
+using System.Web.Mvc;
+namespace StudentMVC.Controllers
+{
+  public class HomeController : Controller
+  {
+    public ActionResult Index()
+    {
+      return View();
+    }
+    public ActionResult About()
+    {
+      ViewBag.Message = "Your application description page.";
+      return View();
+    }
+    public ActionResult Contact()
+    {
+      ViewBag.Message = "Your contact page.";
+      return View();
+    }
+  }
+}
+The important part is:
+public ActionResult Index()
+{
+  return View();
+}
+Here:
+ Index() is an action method.
+ return View() tells MVC to display the corresponding View.
+ The corresponding view is normally:
+Views/Home/Index.cshtml
+Part D – Modify the Controller
+Let's create a simple student page.
+Open:
+Controllers
+
+→ HomeController.cs
+Add the following action:
+public ActionResult Student()
+{
+  ViewBag.Name = "Rahul";
+  ViewBag.Course = "B.Sc. Information Technology";
+  ViewBag.RollNo = 101;
+  return View();
+}
+Your controller will now contain:
+public class HomeController : Controller
+{
+  public ActionResult Index()
+  {
+    return View();
+  }
+  public ActionResult Student()
+  {
+    ViewBag.Name = "Rahul";
+    ViewBag.Course = "B.Sc. Information Technology";
+    ViewBag.RollNo = 101;
+    return View();
+  }
+}
+Part E – Create the View
+Now we need to create a View for the Student() action.
+Step 1
+Right-click on:
+Student()
+inside HomeController.cs.
+Select:
+
+Add View...
+Step 2
+In the Add View window, enter:
+View name: Student
+Select:
+Empty (without model)
+Click:
+Add
+Visual Studio creates:
+Views
+└── Home
+└── Student.cshtml
+
+Part F – Add HTML to the View
+Open:
+Views
+→ Home
+→ Student.cshtml
+Replace its contents with:
+@{
+  ViewBag.Title = "Student Information";
+}
+<h2>Student Information</h2>
+<p><strong>Name:</strong> @ViewBag.Name</p>
+<p><strong>Roll Number:</strong> @ViewBag.RollNo</p>
+<p><strong>Course:</strong> @ViewBag.Course</p>
+Here:
+@ViewBag.Name
+gets the value from the Controller.
+The Controller contains:
+ViewBag.Name = "Rahul";
+Therefore, the View displays:
+Name: Rahul
+
+Part G – Run the Application
+Press:
+Ctrl + F5
+or click:
+Start Without Debugging
+The application will open in the browser.
+The default URL might look like:
+http://localhost:xxxxx/
+To access our Student page, add:
+/Home/Student
+For example:
+http://localhost:54321/Home/Student
+The exact port number may be different on your computer.
+You should see:
+Student Information
+Name: Rahul
+Roll Number: 101
+Course: B.Sc. Information Technology
+Part H – Understand MVC Routing
+Why does this URL work?
+/Home/Student
+MVC interprets it as:
+/Home/Student
+│ │
+│ └── Action Method
+│
+└───────── Controller
+So:
+Home → HomeController
+Student → Student()
+MVC executes:
+public ActionResult Student()
+{
+  ...
+  return View();
+}
+and displays:
+Views/Home/Student.cshtml
+Part I – Passing Data from Controller to View
+One of the simplest ways to pass data is using ViewBag.
+Controller
+public ActionResult Student()
+{
+  ViewBag.Name = "Rahul";
+  ViewBag.Age = 20;
+  ViewBag.Course = "B.Sc. IT";
+  return View();
+}
+View
+<h2>Student Details</h2>
+
+<p>Name: @ViewBag.Name</p>
+
+<p>Age: @ViewBag.Age</p>
+
+<p>Course: @ViewBag.Course</p>
+Output
+Student Details
+
+Name: Rahul
+Age: 20
+Course: B.Sc. IT
+Part J – Creating a Second Controller
+Now let's create a separate controller.
+In Solution Explorer:
+Right-click:
+Controllers
+
+Select:
+Add
+→ Controller
+Select:
+MVC 5 Controller - Empty
+Click Add.
+Enter:
+StudentController
+Click Add.
+Visual Studio creates:
+Controllers
+├── HomeController.cs
+└── StudentController.cs
+Part K – Add an Action to StudentController
+Open:
+StudentController.cs
+Add:
+using System.Web.Mvc;
+namespace StudentMVC.Controllers
+{
+  public class StudentController : Controller
+  {
+    public ActionResult Index()
+    {
+      ViewBag.Message = "Welcome to Student Management";
+      return View();
+    }
+    public ActionResult Details()
+    {
+      ViewBag.Name = "Priya";
+      ViewBag.Course = "B.Sc. Information Technology";
+      ViewBag.RollNo = 102;
+      return View();
+    }
+  }
+}
+Part L – Create the Details View
+Right-click:
+public ActionResult Details()
+Select:
+Add View
+Enter:
+Details
+Select:
+Empty (without model)
+Click Add.
+The following file will be created:
+Views
+└── Student
+└── Details.cshtml
+Add:
+@{
+  ViewBag.Title = "Student Details";
+}
+
+<h2>Student Details</h2>
+
+<p>Name: @ViewBag.Name</p>
+
+<p>Roll Number: @ViewBag.RollNo</p>
+
+<p>Course: @ViewBag.Course</p>
+Part M – Run the Second Controller
+Run the project and enter:
+
+/Student/Details
+For example:
+http://localhost:54321/Student/Details
+The flow is:
+Browser
+|
+| /Student/Details
+↓
+StudentController
+|
+| Details()
+↓
+Views/Student/Details.cshtml
+|
+↓
+HTML Page
+Part N – Create a Link Between Views
+Suppose you want a link on the Home page to open the Student page.
+Open:
+Views/Home/Index.cshtml
+Add:
+<h2>Welcome to Student MVC Application</h2>
+
+<a href="/Student/Details">View Student Details</a>
+A better MVC approach is to use:
+@Html.ActionLink(
+  "View Student Details",
+  "Details",
+  "Student"
+)
+This creates a link to:
+StudentController
+↓
+Details()
+
+↓
+Details.cshtml
+Complete Example
+Your project can now have this structure:
+StudentMVC
+│
+├── Controllers
+│ ├── HomeController.cs
+│ └── StudentController.cs
+│
+├── Models
+│
+├── Views
+│ │
+│ ├── Home
+│ │ ├── Index.cshtml
+│ │ ├── About.cshtml
+│ │ ├── Contact.cshtml
+│ │ └── Student.cshtml
+│ │
+│ ├── Student
+│ │ └── Details.cshtml
+│ │
+│ └── Shared
+│
+├── Global.asax
+└── Web.config
+
+
+Practical 10 - Creating an Application Using Razor Pages and Tag Helpers
+
+Step 1: Open Visual Studio 2019
+1. Start Visual Studio 2019.
+2. Select Create a new project.
+3. Search for:
+ASP.NET Web Application (.NET Framework)
+4. Select it.
+5. Click Next.
+Step 2: Create the Project
+Enter:
+Project Name: StudentRegistration
+Choose a suitable location.
+Select a .NET Framework version available on your computer, for example:
+.NET Framework 4.7.2
+Click Create.
+Step 3: Select MVC Template
+In the next window, select:
+MVC
+You may leave Authentication as:
+No Authentication
+
+Click Create.
+Visual Studio creates a project with folders similar to:
+StudentRegistration
+│
+├── Controllers
+│
+├── Models
+│
+├── Views
+│ ├── Home
+│ ├── Shared
+│ └── Web.config
+│
+├── Content
+├── Scripts
+└── Global.asax
+Step 4: Create the Student Model
+Right-click the Models folder.
+Select:
+Add → Class
+Enter:
+Student.cs
+Add the following code:
+using System.ComponentModel.DataAnnotations;
+namespace StudentRegistration.Models
+{
+  public class Student
+  {
+    [Required]
+    public string Name { get; set; }
+    [Required]
+    public string Email { get; set; }
+    [Required]
+    public string Password { get; set; }
+    [Required]
+    public string Gender { get; set; }
+    [Required]
+    public string Course { get; set; }
+    public bool Agree { get; set; }
+  }
+}
+The model contains information about the student.
+Step 5: Create the Student Controller
+Right-click the Controllers folder.
+Select:
+Add → Controller
+Select:
+MVC 5 Controller - Empty
+Click Add.
+Enter:
+StudentController
+Click Add.
+Replace the controller code with:
+using System.Web.Mvc;
+using StudentRegistration.Models;
+namespace StudentRegistration.Controllers
+{
+  public class StudentController : Controller
+  {
+    public ActionResult Register()
+    {
+      return View();
+    }
+    [HttpPost]
+    public ActionResult Register(Student student)
+    {
+      if (ModelState.IsValid)
+      {
+        ViewBag.Message = "Student registered successfully!";
+      }
+      return View(student);
+    }    
+  }
+}
+Here:
+ Register() displays the registration form.
+ The [HttpPost] method receives the submitted form data.
+ ModelState.IsValid checks validation.
+ ViewBag.Message displays the result.
+Step 6: Create the Razor View
+Right-click inside the Register() method:
+public ActionResult Register()
+Select:
+Add View
+Choose:
+View name: Register
+Template: Empty
+Model class: Student
+If the model class does not appear, you can create the view first and manually
+specify the model.
+
+The View will be created here:
+Views
+└── Student
+└── Register.cshtml
+
+Step 7: Create the Registration Form Using HTML Helpers
+Open:
+Views/Student/Register.cshtml
+Add:
+@model StudentRegistration.Models.Student
+@{
+  ViewBag.Title = "Student Registration";
+}
+<h2>Student Registration</h2>
+@using (Html.BeginForm())
+{
+  <div>
+    @Html.LabelFor(m => m.Name)
+    @Html.TextBoxFor(m => m.Name)
+    @Html.ValidationMessageFor(m => m.Name)
+  </div>
+  <br />
+  <div>
+    @Html.LabelFor(m => m.Email)
+    @Html.TextBoxFor(m => m.Email)
+    @Html.ValidationMessageFor(m => m.Email)
+  </div>
+  <br />
+  <div>
+    @Html.LabelFor(m => m.Password)
+    @Html.PasswordFor(m => m.Password)
+    @Html.ValidationMessageFor(m => m.Password)
+  </div>
+  <br />
+  <div>
+    @Html.LabelFor(m => m.Gender)
+    @Html.RadioButtonFor(m => m.Gender, "Male")
+    Male
+    @Html.RadioButtonFor(m => m.Gender, "Female")
+    Female
+  </div>
+  <br />
+  <div>
+  @Html.LabelFor(m => m.Course)
+  @Html.DropDownListFor(
+  m => m.Course,
+  new SelectList(new[]
+  {    
+    "BSc Data Science",
+    "BSc IT",
+    "BCA",
+    "MCA"
+  }),
+  "Select Course"
+  )
+  </div>
+  <br />
+  <div>
+    @Html.CheckBoxFor(m => m.Agree)
+      I agree to the terms and conditions.
+  </div>
+  <br />
+  <input type="submit" value="Register" />
+}
+@if (ViewBag.Message != null)
+{
+  <h3>@ViewBag.Message</h3>
+}
+Step 8: Understand the HTML Helpers
+1. Html.BeginForm()
+This creates an HTML <form> element.
+@using (Html.BeginForm())
+{
+// Form controls
+}
+It is equivalent to creating a form element manually.
+2. Html.LabelFor()
+Creates a label for a model property.
+@Html.LabelFor(m => m.Name)
+It generates HTML similar to:
+<label for="Name">Name</label>
+3. Html.TextBoxFor()
+Creates a text box.
+@Html.TextBoxFor(m => m.Name)
+It generates an input element associated with the Name property.
+4. Html.PasswordFor()
+Creates a password field.
+@Html.PasswordFor(m => m.Password)
+The entered characters are hidden in the browser.
+
+5. Html.RadioButtonFor()
+Creates radio buttons.
+@Html.RadioButtonFor(m => m.Gender, "Male")
+and:
+@Html.RadioButtonFor(m => m.Gender, "Female")
+The user can select one gender.
+6. Html.DropDownListFor()
+Creates a dropdown list.
+@Html.DropDownListFor(
+m => m.Course,
+new SelectList(new[]
+{
+"BSc Data Science",
+"BSc IT",
+"BCA",
+"MCA"
+}),
+"Select Course"
+)
+The user can select one course.
+7. Html.CheckBoxFor()
+Creates a checkbox.
+@Html.CheckBoxFor(m => m.Agree)
+The value is stored in the Agree property.
+8. Html.ValidationMessageFor()
+Displays validation errors for a particular property.
+@Html.ValidationMessageFor(m => m.Name)
+Because the model contains:
+
+[Required]
+public string Name { get; set; }
+the Name field cannot be left empty when validation is performed.
+Step 9: Run the Project
+Press:
+Ctrl + F5
+or click:
+IIS Express
+The browser opens the application.
+Navigate to:
+/Student/Register
+For example:
+https://localhost:xxxxx/Student/Register
+You should see:
+Student Registration
+Name: [________________]
+Email: [________________]
+Password: [________________]
+Gender: ○ Male ○ Female
+Course: [Select Course ▼]
+☐ I agree to the terms and conditions.
+[ Register ]
+Step 10: Test Form Submission
+
+Enter sample data:
+Name : Rahul
+Email : rahul@gmail.com
+Password : 12345
+Gender : Male
+Course : BSc Data Science
+Select:
+I agree to the terms and conditions.
+Click:
+Register
+The controller receives the information:
+[HttpPost]
+public ActionResult Register(Student student)
+If the data is valid:
+ViewBag.Message = "Student registered successfully!";
+The page displays:
+Student registered successfully!
+Step 11: Test Validation
+Run the application again and click Register without entering the required
+fields.
+Because the model contains:
+[Required]
+public string Name { get; set; }
+and similar validation rules for Email, Password, and Course, the validation
+messages will be displayed.
+For example:
+Name is required.
+
+Email is required.
+Password is required.  
+Course is required.
