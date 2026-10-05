@@ -9,6 +9,7 @@ db.dropDatabase()
 
 B. Write a MongoDB query to create, display and drop collection.  
 use Shlok
+show collections
 db.createCollection("Data")
 show collections
 db.Data.drop()
@@ -24,22 +25,18 @@ db.Doc.remove({"Name":"Shlok"})
 db.Doc.find()
 
 D. Employee Queries  
-
 1) Insert and display the documents in the Employee collection.   
 use Employee
 db.col.insertMany([{Name:"Smitu",Salary:100000,Dept:"ID",City:"Mumbai"},{Name:"Romal",Salary:15000,Dept:"IT",City:"Thane"},{Name:"Sujal",Salary:9000,Dept:"Tester",City:"Bandra"},{Name:"Manav",Salary:30000,Dept:"Finance",City:"Kurla"},{Name:"Swathi",Salary:4000,Dept:"Developer",City:"Pune"}]) 
 db.col.find()
 2) Display details of employees who live in Mumbai.   
 db.col.find({City:"Mumbai"})
-3) Display details of employee staying in Kurla and salary greater than 
-19000  
+3) Display details of employee staying in Kurla and salary greater than 19000  
 db.col.find({City:"Kurla",Salary:{$gt:19000}})
-4) Display details of the employee whose salary is greater than equal 10000 
-but less than 20000.
+4) Display details of the employee whose salary is greater than equal 10000 but less than 20000.
 db.col.find({Salary:{$gte:10000, $lt:20000}})
-5) Display details of employees staying in either thane or mumbai and salary 
-greater than 10000.  
-db.col.find({$or:[{City:"Mumbai"},{City:"Thane"}],Salary:{$gt:19000}})
+5) Display details of employees staying in either thane or mumbai and salary greater than 10000.  
+db.col.find({$or:[{City:"Mumbai"},{City:"Thane"}],Salary:{$gt:10000}})
 6) Display details of employee whose salary is not equal to 10000 and working in either developer or tester department. 
 db.col.find({$or:[{Dept:"Developer"},{Dept:"Tester"}],Salary:{$ne:10000}})
 
@@ -55,9 +52,9 @@ db.col.insertMany([
 ... ])
 db.col.find()
 2. Update the country to UK for all female users.  
-db.col.updatateMany({Gender:"Female"}, {$set:{Country:"UK"}})
+db.col.updateMany({Gender:"Female"}, {$set:{Country:"UK"}})
 3. Add the new field company to all the documents.  
-db.col.updatateMany({},{$set:{Company:"Wipro"}})
+db.col.updateMany({},{$set:{Company:"Wipro"}})
 4. Delete all the documents where Gender = ‘M’.  
 db.col.remove({"Gender":"Male"})
 5. Find out a count of female users who stay in either India or USA.  
@@ -114,6 +111,10 @@ public class insert
         System.out.println("Document inserted successfully");  
     } 
 }   
+If you haven't configured CLASSPATH, use:
+javac -cp "C:\MongoDBJava\*" insert.java
+then:
+java -cp ".;C:\MongoDBJava\*" insert
 in cmd db.MyCol.find().pretty()
   
 2. Update the document in MongoDB using Java.  
@@ -192,19 +193,15 @@ public class delete
 in cmd db.MyCol.find().pretty()
 
 Practical 5 - PHP  
-php_mongo.dll ---> copy this file and paste it in xampp--> php--> ext  
-Edit the configuration --> xampp --> php ---> php(Type:  
-Configuration setting)   
-Save Files at the location:  
-C:\xampp\htdocs\  
-Execute:  
-Open xampp  
-Apache  Start (Make it active) and Admin(Make it active)  
-Browser will open  
-Remove dashboard and instead give the name of the file (eg: 
-insert.php)  
-Output is printed.  
-insert.php  
+Go to: C:\xampp\htdocs 
+Create a folder: mongodb
+So your path becomes: C:\xampp\htdocs\mongodb
+Create:
+insert.php
+inside: C:\xampp\htdocs\mongodb
+To run insert.php: Open browser: http://localhost/mongodb/insert.php
+
+1. insert.php  
 <?php  
 $m = new MongoClient();  
 echo "Connection to database successfully";  
@@ -268,6 +265,10 @@ echo "\nDocument deleted successfully";
 in cmd db.MyCol.find().pretty()
 
 Practical 6 - Python
+open cmd and run: 
+pip install pymongo or python -m pip install pymongo
+pip show pymongo
+
 1. insert    
 from pymongo import MongoClient 
 client = MongoClient('localhost',27017) 
@@ -287,9 +288,10 @@ def insert():
         print("Inserted data successfully")       
     except Exception:       
         print(str(e))         
+insert()  
+in python cmd run: python insert.py
 in cmd db.MyCol.find().pretty()
 
-insert()  
 2. update()  
 from pymongo import MongoClient  
 client = MongoClient('localhost',27017)  
@@ -302,9 +304,10 @@ def update():
         print("\nRecords updated successfully\n")      
     except Exception:  
         print(str(e))  
+update()  
+in python cmd run: python update.py
 in cmd db.MyCol.find().pretty()
 
-update()  
 3. Retrieve  
 from pymongo import MongoClient  
 client = MongoClient('localhost',27017)  
@@ -318,6 +321,7 @@ def read():
     except Exception:  
         print(str(e))  
 read()  
+in python cmd run: python retrieve.py
 in cmd db.MyCol.find().pretty()
 
 4. delete  
@@ -332,6 +336,7 @@ def delete():
     except Exception:  
         print(str(e))  
 delete()  
+in python cmd run: python delete.py
 in cmd db.MyCol.find().pretty()
 
 Practical 7  
